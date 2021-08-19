@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MenuItem;
+use App\Http\Resources\MenuCollection;
 use Illuminate\Routing\Controller as BaseController;
 
 class MenuController extends BaseController
@@ -95,6 +96,10 @@ class MenuController extends BaseController
      */
 
     public function getMenuItems() {
-        throw new \Exception('implement in coding task 3');
+        $menuitems = MenuItem::with('childrenRecursive')->whereNull('parent_id')->get();
+
+        $response = new MenuCollection($menuitems);
+
+        return response()->json($response);
     }
 }
